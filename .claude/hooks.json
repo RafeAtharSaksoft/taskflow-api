@@ -1,0 +1,20 @@
+{
+  "hooks": {
+    "afterWrite": [
+      {
+        "matcher": "*.js",
+        "command": "npx eslint --fix $FILE"
+      },
+      {
+        "matcher": "*.js",
+        "command": "npx prettier --write $FILE"
+      }
+    ],
+    "afterWrite": [
+      {
+        "matcher": "src/**/*.js",
+        "command": "npm run test:file $FILE"
+      }
+    ]
+  }
+}
