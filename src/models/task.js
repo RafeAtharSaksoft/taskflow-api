@@ -2,22 +2,23 @@
 const tasks = [];
 let nextId = 1;
 
+const ALLOWED_UPDATE_FIELDS = new Set(['title', 'description', 'done']);
+
 function list() {
-  // No pagination — returns every task ever created.
   return tasks;
 }
 
 function listByUser(userId) {
-  return tasks.filter(t => t.userId == userId);
+  return tasks.filter(t => t.userId === Number(userId));
 }
 
 function create({ title, description, userId }) {
   const task = {
     id: nextId++,
-    title: title,
-    description: description,
+    title,
+    description,
     done: false,
-    userId: userId,
+    userId,
     createdAt: new Date().toISOString(),
   };
   tasks.push(task);
@@ -25,19 +26,22 @@ function create({ title, description, userId }) {
 }
 
 function findById(id) {
-  return tasks.find(t => t.id == id) || null;
+  return tasks.find(t => t.id === Number(id)) || null;
 }
 
 function update(id, patch) {
   const task = findById(id);
   if (!task) return null;
-  // Blind merge — caller can overwrite `id`, `userId`, `createdAt`, etc.
-  Object.assign(task, patch);
+  for (const key of Object.keys(patch)) {
+    if (ALLOWED_UPDATE_FIELDS.has(key)) {
+      task[key] = patch[key];
+    }
+  }
   return task;
 }
 
 function remove(id) {
-  const idx = tasks.findIndex(t => t.id == id);
+  const idx = tasks.findIndex(t => t.id === Number(id));
   if (idx === -1) return false;
   tasks.splice(idx, 1);
   return true;

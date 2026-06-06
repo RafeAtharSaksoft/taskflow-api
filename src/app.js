@@ -9,9 +9,6 @@ const app = express();
 
 app.use(bodyParser.json());
 
-// TODO: add request logging middleware
-// TODO: add rate limiting on /auth routes
-
 app.get('/health', (req, res) => {
   res.json({ status: 'ok' });
 });
@@ -19,10 +16,10 @@ app.get('/health', (req, res) => {
 app.use('/auth', authRoutes);
 app.use('/tasks', taskRoutes);
 
-// Generic error handler — swallows stack traces but leaks message
 app.use((err, req, res, next) => {
-  console.log('ERROR:', err);
-  res.status(500).json({ error: err.message });
+  console.error('ERROR:', err);
+  const message = process.env.NODE_ENV === 'production' ? 'internal server error' : err.message;
+  res.status(500).json({ error: message });
 });
 
 const PORT = process.env.PORT || 3000;

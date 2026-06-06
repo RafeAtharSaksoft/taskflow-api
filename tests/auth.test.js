@@ -5,7 +5,7 @@ describe('auth', () => {
   it('registers a new user', async () => {
     const res = await request(app)
       .post('/auth/register')
-      .send({ email: 'a@example.com', password: 'hunter2' });
+      .send({ email: 'a@example.com', password: 'hunter2!' });
     expect(res.status).toBe(201);
     expect(res.body.token).toBeDefined();
   });
@@ -13,11 +13,11 @@ describe('auth', () => {
   it('logs in an existing user', async () => {
     await request(app)
       .post('/auth/register')
-      .send({ email: 'b@example.com', password: 'hunter2' });
+      .send({ email: 'b@example.com', password: 'hunter2!' });
 
     const res = await request(app)
       .post('/auth/login')
-      .send({ email: 'b@example.com', password: 'hunter2' });
+      .send({ email: 'b@example.com', password: 'hunter2!' });
 
     expect(res.status).toBe(200);
     expect(res.body.token).toBeDefined();

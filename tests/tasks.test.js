@@ -4,7 +4,7 @@ const app = require('../src/app');
 async function registerAndLogin(email) {
   const res = await request(app)
     .post('/auth/register')
-    .send({ email, password: 'hunter2' });
+    .send({ email, password: 'hunter2!' });
   return res.body.token;
 }
 
